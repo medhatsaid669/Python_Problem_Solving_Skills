@@ -309,26 +309,29 @@ they don’t intersect, print -1
 ■ So the intersection is {3, 4, 5, 6} = [3, 6]
 ○ 1 15  20 30 ⇒ -1"""
 
-s1, e1, s2, e2 = map(int, input().split())
+def print_intersection():
+    try:
+        values = input().replace("\ufeff", "").replace("ï»¿", "").split()
+    except EOFError:
+        return
 
-if e1 < s2 or e2 < s1:
-    print(-1)		# One of them ends before start of the another
-else:
-    # This is tricky. Trying to list all cases will be hard and buggy
-    # You need to notice which ones came first
-    # Then consider the possible cases (e.g. one of them completely inside the second)
+    s1, e1, s2, e2 = map(int, values)
 
-    # However, thinking makes it easier
-    # The intersection starts at the maximum of the starts
-    # The intersection ends at the minimum of the ends
-    # Draw some examples
+    if e1 < s2 or e2 < s1:
+        print(-1)        # One of them ends before start of the another
+    else:
+        # The intersection starts at the maximum of the starts
+        # and ends at the minimum of the ends.
+        if s1 < s2:
+            s1 = s2      # maximum of (s1, s2)
+        if e1 > e2:
+            e1 = e2      # minimum of (e1, e2)
 
-    if s1 < s2:
-        s1 = s2	    # maximum of (s1, s2)
-    if e1 > e2:
-        e1 = e2	    # minimum of (e1, e2)
+        print(s1, e1)
 
-    print(s1, e1)
+
+if __name__ == "__main__":
+    print_intersection()
 
 '''
 Cases
