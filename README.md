@@ -1,6 +1,6 @@
 📘 About This Repository
 
-This repository contains 200+ solved problems to help beginners build a strong foundation in programming.
+This repository contains 500+ solved problems to help beginners build a strong foundation in programming.
 
 It focuses on:
 
@@ -15,7 +15,7 @@ Goal: Support beginners with clear, simple, and effective learning ❤️
 
 عن المشروع
 
-يحتوي هذا المستودع على أكثر من 200 مسألة محلولة لمساعدة المبتدئين على بناء أساس قوي في البرمجة.
+يحتوي هذا المستودع على أكثر من 500 مسألة محلولة لمساعدة المبتدئين على بناء أساس قوي في البرمجة.
 
 يركّز على:
 
