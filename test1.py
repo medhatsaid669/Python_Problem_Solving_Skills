@@ -1,2 +1,22 @@
-mat = [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]]
-print(list(zip(*mat)))
+def factorial(n):
+    print("Function Call: factorial: n=", n)
+
+    if n == 1:      # base case
+        return 1
+    subproblem = factorial(n-1)
+    return subproblem * n
+
+print(factorial(6))
+
+
+
+
+
+
+
+
+
+
+
+
+
