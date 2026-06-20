@@ -1,12 +1,24 @@
-def factorial(n):
-    print("Function Call: factorial: n=", n)
+class Hello:
+    def __init__(self):
+        self.counter = 1234
 
-    if n == 1:      # base case
-        return 1
-    subproblem = factorial(n-1)
-    return subproblem * n
 
-print(factorial(6))
+class Hack:
+    pass
+
+
+if __name__ == '__main__':
+    h = Hack()
+    Hello.__init__(h)
+    print(h.counter)
+
+
+
+
+
+
+
+
 
 
 
