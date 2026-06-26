@@ -1053,3 +1053,253 @@ Define an interface to be unifed. Our codebase depends on it only. This is calle
 
 # Special Methods Reflection
 
+"""Not Error!
+● Sometimes python does a few trials to satisfy the operator BEFORE deciding no way and raises an error!
+● We call it reflection
+○ E.g. lt reflection is gt
+■ A > B is same as B < A"""
+
+# class MyPair:
+#     def __init__(self, first, second):
+#         self.first = first
+#         self.second = second
+#
+#     def __repr__(self):
+#         return f'({self.first}, {self.second})'
+#
+#     def __lt__(self, other_pair):
+#         return self.first < other_pair.first and \
+#                self.second < other_pair.second
+#
+# if __name__ == '__main__':
+#
+#     p1 = MyPair(5, 10)
+#     p2 = MyPair(7, 13)
+#
+#     print(p1 < p2)  # True
+#     print(p2 > p1)  # True:
+#     # Python calls automatically swaps and calls p1 < p2
+
+"""An error!
+● The add function returns NotImplemented value if the target object is not handled
+● Hence it raises error
+● So
+○ MyPair + SingleValue Fails
+● But if opposite is supported?
+○ SingleValue + MyPair works!
+● Python tries to swap and check out! """
+
+# class MyPair:
+#     def __init__(self, first, second):
+#         self.first = first
+#         self.second = second
+#
+#     def __add__(self, other):
+#         if not isinstance(other, MyPair):
+#             return NotImplemented
+#         return MyPair(self.first+other.first,
+#                       self.second+other.second)
+#
+# class SingleValue:
+#     def __init__(self, val):
+#         self.val = val
+#
+# if __name__ == '__main__':
+#     p = MyPair(2, 3)
+#     s = SingleValue(10)
+#     p = p + s
+#     # TypeError: unsupported operand type(s) for +:
+#     # 'MyPair' and 'SingleValue'
+
+"""Reflection
+● For p+s python: reflects IF __add__ is not defined or returned NotImplemented
+● To reflect it 
+○ Swap them
+○ Search for __radd__ but in the other class (SingleValue)
+○ If exists, it calls it"""
+
+# class MyPair:
+#     def __init__(self, first, second):
+#         self.first = first
+#         self.second = second
+#
+#     def __repr__(self):
+#         return f'({self.first}, {self.second})'
+#
+#     def __add__(self, other_pair):
+#         if not isinstance(other_pair, MyPair):
+#             return NotImplemented
+#         return MyPair(self.first + other_pair.first,
+#                       self.second + other_pair.second)
+#
+# class SingleValue:
+#     def __init__(self, val):
+#         self.val = val
+#
+#     def __radd__(self, mypair):
+#         if not isinstance(mypair, MyPair):
+#             return NotImplemented
+#         return MyPair(self.val + mypair.first,
+#                       self.val + mypair.second)
+#
+# if __name__ == '__main__':
+#     p = MyPair(2, 3)
+#     s = SingleValue(10)
+#     p = p + s
+#     print(p)   # (12, 13)
+
+"""Error Again
+● s + p
+○ Python searches for __add__ in Single Value
+○ As it doesn’t exist, it searches for __radd__ in MyPair, which again doesn’t exist!
+● So be careful from the flow
+○ Python is systematic in searching"""
+
+# class MyPair:
+#     def __init__(self, first, second):
+#         self.first = first
+#         self.second = second
+#
+#     def __repr__(self):
+#         return f'({self.first}, {self.second})'
+#
+#     def __add__(self, other_pair):
+#         if not isinstance(other_pair, MyPair):
+#             return NotImplemented
+#         return MyPair(self.first + other_pair.first,
+#                       self.second + other_pair.second)
+#
+# class SingleValue:
+#     def __init__(self, val):
+#         self.val = val
+#
+#     def __radd__(self, mypair):
+#         if not isinstance(mypair, MyPair):
+#             return NotImplemented
+#         return MyPair(self.val + mypair.first,
+#                       self.val + mypair.second)
+#
+# if __name__ == '__main__':
+#     p = MyPair(2, 3)
+#     s = SingleValue(10)
+#     p = s + p
+#     print(p)   # TypeError: unsupported
+
+"""Other Operators for reflection
+● __sub__  ⇒   __rsub__
+● __mul__ ⇒   __rmul__
+● __truediv__  ⇒   __rtruediv__
+● __floordiv__  ⇒  __rfloordiv__
+● __mod__  ⇒ __rmod__
+● __pow__ ⇒  __rpow__
+● __matmul__ ⇒  __rmatmul__  
+● __lt__  ⇒   __gt__
+● __gt__  ⇒   __lt__
+● __le__  ⇒   __ge__
+● __ge__  ⇒   __le__
+● __ne__  ⇒   __eq__
+● __eq__  ⇒   __ne__"""
+
+
+# Special Methods: bool,  contains, format
+
+"""bool dunder
+● It can be used to convert your object to boolean result
+● Remember things like 0 or [] () {} ‘’ are all false
+○ So be consistent!"""
+
+# class MyPair:
+#     def __init__(self, first, second):
+#         self.first = first
+#         self.second = second
+#
+#     def __repr__(self):
+#         return f'({self.first}, {self.second})'
+#
+#     def __add__(self, other):
+#         return MyPair(self.first  + other.first,
+#                       self.second + other.second)
+#
+#     def __bool__(self):
+#         if self.first == 0 and self.second == 0:
+#             return False
+#         return True
+#         # It should return bool, e.g. NOT
+#         # return self.first and self.second
+# if __name__ == '__main__':
+#     print(bool(MyPair(2, 3)))      # True
+#     print(bool(MyPair(2, 0)))      # True
+#     print(bool(MyPair(0, 0)))      # False
+
+"""Membership
+● To check if something in your object, overrides contain dundner"""
+
+# class MyPair:
+#     def __init__(self, first, second):
+#         self.first = first
+#         self.second = second
+#
+#     def __repr__(self):
+#         return f'({self.first}, {self.second})'
+#
+#     def __add__(self, other):
+#         return MyPair(self.first  + other.first,
+#                       self.second + other.second)
+#
+#     def __contains__(self, item):
+#         return self.first == item or self.second == item
+#
+# if __name__ == '__main__':
+#     p = MyPair(2, 3)
+#     print(2 in p)   # True
+#     print(3 in p)   # True
+#     print(4 in p)   # False
+
+"""Formatting
+● Rarely, we may need to format our object
+● We agree on a string format, pass and parse
+○ It depends on class"""
+
+# class MyPair:
+#     def __init__(self, first, second):
+#         self.first = first
+#         self.second = second
+#
+#     def __repr__(self):
+#         return f'({self.first}, {self.second})'
+#
+#     def __add__(self, other):
+#         return MyPair(self.first  + other.first,
+#                       self.second + other.second)
+#
+#     def __format__(self, format_spec):
+#         import time
+#         tm = time.localtime()
+#         return repr(self) + ' ' + time.strftime(format_spec, tm)
+#         # In practice: format_spec is whatever agreed then you parse it
+#
+# if __name__ == '__main__':
+#     p = MyPair(2, 3)
+#     print(format(p))    # (2, 3) , default empty
+#     print(format(p, '%m-%d-%Y, %H:%M:%S'))
+#     # (2, 3) 02/28/2021, 17:21:07
+
+"""Other dunder
+● What If I want to add my defined class in dict? We need to provide __hash__
+○ The function computes an integer representing the object
+○ In data structure class you should understand why and how to hash properly
+○ We typically use the hash of the available immutable objects, e.g. hash(‘mostafa’)
+● Managing the object creation
+○ Whenever a class is instantiated __new__ and __init__ methods are called. 
+○ __new__ method will be called when an object is created and __init__ method will be called to 
+initialize the object
+● __inter__ and __exit__ are used with context manager (recall opening a file)
+● __next__ and __iter__ to make an iterable object
+● And others"""
+
+
+# Special Methods Homework 1
+
+
+
+
