@@ -1300,6 +1300,320 @@ initialize the object
 
 # Special Methods Homework 1
 
+"""Problem #1: Fraction
+● Implement fraction class that support the requested operations.
+○ Note: init should receive integer only
+○ Feel free to go deeper
+● Math hint: To simplify a fraction, you need greatest common divisor (gcd)
+○ Import math ⇒ math.gcd
+● You don’t need to handle a lot of intentional mistakes from the user
+○ Eg. change numerator to a string"""
+
+# from functools import total_ordering
+# import math
+#
+# @total_ordering
+# class Fraction:
+#     def __init__(self, num, den = 1):
+#         assert isinstance(num, int)
+#         assert isinstance(den, int)
+#
+#         g = math.gcd(num, den)
+#         num //= g
+#         den //= g
+#
+#         self.num = num
+#         self.den = den
+#
+#     def __eq__(self, other):
+#         return (self.num, self.den) == (other.num, other.den)
+#
+#     @property
+#     def value(self):
+#         if self.den == 0:
+#             return None
+#         return self.num / self.den
+#
+#     def __repr__(self):
+#         if self.den != 1:
+#             return f'{self.num}/{self.den}'
+#         return f'{self.num}'
+#
+#     def __lt__(self, other):
+#         if not isinstance(other, Fraction):
+#             return False
+#
+#         if self == other:
+#             return False
+#
+#         if self.den == other.den:
+#             return self.num < self.den
+#
+#         a, b = self.value, other.value
+#         if a is None:
+#             return False
+#         if b is None:
+#             return True
+#         return a < b
+#
+#     def __mul__(self, other):
+#         if not isinstance(other, Fraction):
+#             if not isinstance(other, int):
+#                 return NotImplemented
+#             return self * Fraction(other)
+#
+#         return Fraction(self.num * other.num, self.den * other.den)
+#
+#     def __rmul__(self, other):
+#         if not isinstance(other, int):
+#             return NotImplemented
+#         return self * Fraction(other)
+#
+# if __name__ == '__main__':
+#
+#     f1 = Fraction(4, 8)
+#     print(f1)       # 1/2
+#     print(f1 * f1)  # 1/4
+#
+#     f1 = Fraction(3, 8)
+#     f2 = 2 * f1
+#     f3 = f1 * Fraction(5, 4) * 16
+#     print(f1, f2, f3)
+#     # 3/8 3/4 15/2
+#
+#     print(f1 == f2) # False
+#     print(f2 > f1)  # True
+#     print(f1.value) # 0.375
+
+"""Problem #2: Vector
+● Implement a simple vector class to add vectors or compare them
+○ Feel free to go deeper
+● Raise an error if added vectors of unequal length
+● You don’t need to handle intentional mistakes from the user"""
+
+# from functools import total_ordering
+#
+# @total_ordering
+# class Vector:
+#     def __init__(self, *values):
+#         self.values = list(values)
+#
+#     def __repr__(self):
+#         return repr(self.values)
+#
+#     def __eq__(self, other):
+#         if not isinstance(other, Vector):
+#             return NotImplemented
+#         return self.values == other.values
+#
+#     def __lt__(self, other):
+#         if not isinstance(other, Vector):
+#             return NotImplemented
+#         return self.values < other.values
+#
+#     def __add__(self, other):
+#         if not isinstance(other, Vector):
+#             return NotImplemented
+#
+#         if len(self.values) != len(other.values):
+#             raise ValueError('Vectors are not of equal length')
+#
+#         values = [a + b for a, b in zip(self.values, other.values)]
+#         return Vector(*values)
+#
+# if __name__ == '__main__':
+#     v1 = Vector(1, 2, 3, 4)
+#     v2 = Vector(4, 5, 1, -2)
+#     v3 = Vector(4, 5, 1)
+#
+#     print(v1 + v2)  # [5, 7, 4, 2]
+#     print(v1 <= v2)  # True
+#
+#     #print(v1 + v3)  # ValueError: Vectors are not of equal length
+
+"""Problem #3: MyFloat!
+● Have u ever failed to compare floats directly?
+○ This is due to double representation
+○ More worse: dct won’t work
+● Never compare floats directly
+● Create float class that supports comparisons
+○ One way to check if 2 float numbers are equal is to check if their abs is a very small value
+● Note: you still can’t use with dict"""
+
+# 1e-10 = 0.0000000001
+
+# from functools import total_ordering
+#
+# @total_ordering
+# class MyFloat(float):
+#     def __eq__(self, other, eps = 1e-10):
+#         # float is an approximation. If 2 values are equal, the difference should be very small (e..g epsilon)
+#         # This code educational purpose to understand only. See link below
+#         return abs(self - other) < eps
+#
+#     def __lt__(self, other):
+#         if self == other:
+#             return False
+#         return self < other
+#
+# # Future reading https://stackoverflow.com/questions/5595425/what-is-the-best-way-to-compare-floats-for-almost-equality-in-python
+#
+# if __name__ == '__main__':
+#     f1 = 1 + 3/7 -1
+#     f2 = 3/7
+#
+#     # False 0.4285714285714286 0.42857142857142855
+#     print(f1 == f2, f1, f2)
+#
+#     f1 = MyFloat(f1)
+#     f2 = MyFloat(f2)
+#     print(f1 == f2) # True
+#     print(f1 < f2)  # False
+#     print(f1 >= f2) # True
 
 
+# Special Methods Homework 2
+
+"""Problem #1: MyStr!
+● Built-in str class provides + and *, but if we want to subtract
+○ E.g. abcd - cd = ab
+○ That is remove it from its suffix
+● Provide this class, with the requested flexibility"""
+
+# class strv2(str):
+#     def __add__(self, other):
+#         if not isinstance(other, str):
+#             return NotImplemented
+#         return strv2(super().__add__(other))
+#
+#     def __radd__(self, other):
+#         # see __rsub__ logic
+#         if not isinstance(other, str):
+#             return NotImplemented
+#         return strv2(other) + self
+#
+#     def __mul__(self, other):
+#         if not isinstance(other, int):
+#             return NotImplemented
+#         return strv2(super().__mul__(other))
+#
+#     def __rmul__(self, other):
+#         # see __rsub__ logic
+#         if not isinstance(other, int):
+#             return NotImplemented
+#         return self * other
+#
+#     def __sub__(self, other):
+#         if not isinstance(other, str):
+#             return NotImplemented
+#
+#         if not self.endswith(other):
+#             return self
+#
+#         return strv2(self[:-len(other)])
+#
+#     def __rsub__(self, other):
+#         # If we are here: then original call is other - self, but other is str
+#         # we do so operation again and reswap, but consider conver other to our class
+#         if not isinstance(other, str):
+#             return NotImplemented
+#
+#         return strv2(other) - self
+#
+#     def __isub__(self, other):
+#         if not isinstance(other, str):
+#             return NotImplemented
+#
+#         self = self - other
+#
+#         return self
+#
+# if __name__ == '__main__':
+#
+#     s1 = strv2('abcd')
+#     s2 = strv2('cd')
+#
+#     r = s1 - s2                 # ab
+#     r = r * 2 + 2 * s2          # ababcdcd
+#     r -= 'dcd'                  # ababc
+#     r += 'Xabcd' - s1 - 'Y'     # ababcX
+#
+#     print(r, type(r))
+
+
+"""Problem #2: Sorting!
+● Create an Employee class with the following 3 attributes
+● The lt method order based on following order:
+○ Name: decreasing
+○ Salary, then age increasing"""
+
+# class Employee:
+#     def __init__(self, name, salary, age):
+#         self.name = name
+#         self.salary = salary
+#         self.age = age
+#
+#     def __repr__(self):
+#         return f'({self.name}, {self.salary}, {self.age})'
+#
+#     def __lt__(self, other):
+#         # Observe: we use other.name in the first tuple
+#         return (other.name, self.salary, self.age) < (self.name, other.salary, other.age)
+#
+# lst = [Employee('mostafa', 10, 18),
+#        Employee('Ziad', 100, 19),
+#        Employee('mostafa', 7, 35),
+#        Employee('mostafa', 7, 26),
+#        Employee('warda', 9, 18)]
+# lst.sort()
+# print(lst)
+# # [(warda, 9, 18), (mostafa, 7, 26), (mostafa, 7, 35),
+# #   (mostafa, 10, 18), (Ziad, 100, 19)]
+
+
+"""Problem #3: More Sorting!
+● We would like also to sort the objects but using lambda in 3 ways:
+● 1) Based on age then name then salary, all increasing
+● 2) Based on name (increasing), salary (decreasing), age (increasing)
+● Do request 2 in two (technically different) ways using lambda"""
+
+# class Employee:
+#     def __init__(self, name, salary, age):
+#         self.name = name
+#         self.salary = salary
+#         self.age = age
+#
+#     def __repr__(self):
+#         return f'({self.name}, {self.salary}, {self.age})'
+#
+#     def __lt__(self, other):
+#         # Observe: we use other.name in the first tuple
+#         return (other.name, self.salary, self.age) < (self.name, other.salary, other.age)
+#
+# lst = [Employee('mostafa', 10, 18),
+#        Employee('Ziad', 100, 19),
+#        Employee('mostafa', 7, 35),
+#        Employee('mostafa', 7, 26),
+#        Employee('warda', 9, 18)]
+# lst.sort()
+# print(lst)
+# # [(warda, 9, 18), (mostafa, 7, 26), (mostafa, 7, 35),
+# #   (mostafa, 10, 18), (Ziad, 100, 19)]
+#
+# # Use lambda to pass a key based on age, then name, then salary (smaller first)
+# lst.sort(key=lambda emp : (emp.age, emp.name, emp.salary))
+# print(lst)
+# # [(mostafa, 10, 18), (warda, 9, 18), (Ziad, 100, 19), (mostafa, 7, 26), (mostafa, 7, 35)]
+#
+# # sort is in-place. We can do several sort commands to achieve one complex criteria
+# # but u must do it in opposite direction: we want sort on name, salary(decreasing), age
+# # then opposite: sort age, salary(decreasing), name
+# lst.sort(key=lambda emp : emp.age)
+# lst.sort(key=lambda emp : emp.salary, reverse=True)
+# lst.sort(key=lambda emp : emp.name)
+# # [(Ziad, 100, 19), (mostafa, 10, 18), (mostafa, 7, 26), (mostafa, 7, 35), (warda, 9, 18)]
+#
+# # Same as above. Mathematically: sorting int x increasing is same sorting -x decreasing
+# lst.sort(key=lambda emp : (emp.name, -emp.salary, emp.age))
+# print(lst)
 
