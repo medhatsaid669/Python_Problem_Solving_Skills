@@ -1,4 +1,4 @@
-# About This Repository
+## About This Repository
 
 This repository contains 500+ solved problems to help beginners build a strong foundation in programming.
 
